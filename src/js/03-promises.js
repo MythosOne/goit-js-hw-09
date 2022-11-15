@@ -13,34 +13,24 @@ function createPromise(position, delay) {
   });
   }
 
-const form = document.querySelector('.form');
-form.addEventListener('submit', onFormSubmit);
+const formRef = document.querySelector('.form');
+formRef.addEventListener('submit', onFormSubmit);
 
   function onFormSubmit(event) {
     event.preventDefault();
-    const {
-        elements: { delay, step, amount }
-    } = event.currentTarget;
-  
-    const dataUser = {
-      delay: delay.value,
-      step: step.value,
-      amount: amount.value
-    };
-    let delayTime = Number(dataUser.delay);
-    let stepTime=Number(dataUser.step);
-    // console.log(dataUser);
-  event.currentTarget.reset();
-  
-  for (let i = 1; i <= Number(dataUser.amount); i++){
-    // console.log(Number(dataUser.amount));
-    createPromise(i, delayTime)
+
+    let delay = Number(event.currentTarget.delay.value);
+    const step = Number(event.currentTarget.step.value);
+    const amount = Number(event.currentTarget.amount.value);
+
+  for (let i = 1; i <= amount; i++){
+    createPromise(i, delay)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
       })
       .catch(({ position, delay }) => {
         Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
       });
-    delayTime += stepTime;
+    delay += step;
   }
 }
